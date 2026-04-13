@@ -21,23 +21,17 @@ jobs:
         with:
           node-version: '20'
 
-      # 3. Dependencies installieren (Fix für CIPP/npm Konflikte)
+      # 3. Dependencies installieren
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. Build (ERZEUGT die Functions!)
+      # 4. Build
       - name: Build project
-        run: |
-          npm run build
-          npm prune --production
+        run: npm run build
 
-      # 5. Cleanup (verhindert Azure Deploy Fehler)
-      - name: Clean unnecessary files
-        run: |
-          rm -rf .git
-          rm -rf .github
+      # ❗ KEIN prune, KEIN cleanup!
 
-      # 6. Deploy zu Azure Functions
+      # 5. Deploy
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
