@@ -15,21 +15,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Node installieren (CIPP braucht das!)
+      # 2. Node installieren
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # 3. Dependencies installieren
+      # 3. Dependencies installieren (Fix für CIPP/npm Konflikte)
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # 4. CIPP Build (WICHTIG!)
+      # 4. Build (ERZEUGT die Functions!)
       - name: Build project
-        run: npm run build
+        run: |
+          npm run build
+          npm prune --production
 
-      # 5. Deployment zu Azure Functions
+      # 5. Cleanup (verhindert Azure Deploy Fehler)
+      - name: Clean unnecessary files
+        run: |
+          rm -rf .git
+          rm -rf .github
+
+      # 6. Deploy zu Azure Functions
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
