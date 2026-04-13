@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy Powershell project to Azure Function App - cippi56st
+name: Build and deploy CIPP to Azure Function App - cippi56st
 
 on:
   push:
@@ -9,22 +6,34 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
-
 jobs:
-  deploy:
-    runs-on: windows-latest
-    
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
     steps:
-      - name: 'Checkout GitHub Action'
+      # 1. Repo auschecken
+      - name: Checkout repository
         uses: actions/checkout@v4
-      
-      - name: 'Run Azure Functions Action'
+
+      # 2. Node installieren (CIPP braucht das!)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. Dependencies installieren
+      - name: Install dependencies
+        run: npm install
+
+      # 4. CIPP Build (WICHTIG!)
+      - name: Build project
+        run: npm run build
+
+      # 5. Deployment zu Azure Functions
+      - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
-        id: fa
         with:
           app-name: 'cippi56st'
           slot-name: 'Production'
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          package: .
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
