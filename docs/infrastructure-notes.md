@@ -102,3 +102,15 @@ Falls Function Offloading wieder gewuenscht: neue Offload-App erstellen und mit
 **CIPP-API**-Code deployen (nicht ueber dieses Frontend-Repo), danach in CIPP →
 Super Admin → Function Offloading aktivieren. Vorher pruefen, ob in der `Version`
 Storage Table noch alte `cippi56st2*`-Registrierungen haengen.
+---
+
+### ✅ Korrektur Deployment-Mechanismus CIPP-API (2026-08-11)
+
+Der Abschnitt „CIPP-API Deployment-Mechanismus" oben ist veraltet: `cippi56st`
+deployt inzwischen **automatisch** aus `kloudservice/CIPP-API` (Azure Deployment
+Center; Kudu-Deployments zeigen `actor: pull[bot]` bei jedem Upstream-Sync).
+Manuelles Kudu-ZIP-Deploy ist nicht mehr noetig. Die API laeuft dadurch immer auf
+dem aktuellen Upstream-Stand — wichtig: das **Frontend** (dieses Repo) muss per
+pull[bot] genauso aktuell bleiben, sonst entsteht Versions-Drift (siehe Vorfall
+31.07.–11.08.2026: blockierter Frontend-Sync → Onboarding im UI defekt, CIPP
+loggte "Frontend is out of date"-Alerts).
