@@ -88,3 +88,17 @@ $zipUrl = "https://github.com/KelvinTegelaar/CIPP-API/archive/refs/heads/master.
 Das `kloudservice/CIPP-API` Repository ist noch **nicht für Deployments konfiguriert**
 (keine `AZURE_CONNECTION_STRING` Secret, Workflows haben Fork-Sperre).
 Für automatische Updates: Secret hinterlegen und Fork-Bedingung aus `publish_release.yml` entfernen.
+
+---
+
+### ⚠️ Offload Function App `cippi56st-2` existiert nicht mehr (Stand 2026-08-11)
+
+`cippi56st-2.azurewebsites.net` ist per DNS nicht mehr aufloesbar — die App wurde
+offenbar geloescht. Der vom Azure-Wizard erzeugte Workflow `main_cippi56st-2.yml`
+(deployte faelschlich das Frontend-Repo auf die Offload-API-App) schlug seit dem
+13.04.2026 bei jedem Push fehl und wurde am 2026-08-11 aus dem Repo entfernt.
+
+Falls Function Offloading wieder gewuenscht: neue Offload-App erstellen und mit
+**CIPP-API**-Code deployen (nicht ueber dieses Frontend-Repo), danach in CIPP →
+Super Admin → Function Offloading aktivieren. Vorher pruefen, ob in der `Version`
+Storage Table noch alte `cippi56st2*`-Registrierungen haengen.
